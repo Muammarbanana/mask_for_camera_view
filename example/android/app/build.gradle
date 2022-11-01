@@ -51,25 +51,25 @@ android {
     }
 
 
-    signingConfigs {
-        release {
-            storeFile file("turoboff_keystore.jks")
-            storePassword ''
-            keyAlias 'key0'
-            keyPassword ''
-        }
+    // signingConfigs {
+    //     release {
+    //         storeFile file("turoboff_keystore.jks")
+    //         storePassword ''
+    //         keyAlias 'key0'
+    //         keyPassword ''
+    //     }
 
-        debug {
-            storeFile file("turoboff_keystore.jks")
-            storePassword ''
-            keyAlias 'key0'
-            keyPassword ''
-        }
-    }
+    //     debug {
+    //         storeFile file("turoboff_keystore.jks")
+    //         storePassword ''
+    //         keyAlias 'key0'
+    //         keyPassword ''
+    //     }
+    // }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
             shrinkResources false
             minifyEnabled false
             

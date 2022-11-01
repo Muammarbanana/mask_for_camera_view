@@ -115,104 +115,40 @@ class _MaskForCameraViewState extends State<MaskForCameraView> {
       body: Stack(
         children: [
           Positioned(
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: !_cameraController!.value.isInitialized
-                ? Container()
-                : Column(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          key: _stickyKey,
-                          color: widget.appBarColor,
-                        ),
-                      ),
-                      CameraPreview(
-                        _cameraController!,
-                      ),
-                      Expanded(
-                        child: Container(
-                          color: widget.bottomBarColor,
-                        ),
-                      )
-                    ],
-                  ),
-          ),
-          Positioned(
-            top: 0.0,
-            left: 0.0,
-            right: 0.0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6.0),
-              decoration: BoxDecoration(
-                color: widget.appBarColor,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(16.0),
-                  bottomRight: Radius.circular(16.0),
-                ),
-              ),
-              child: SafeArea(
-                bottom: false,
-                child: SizedBox(
-                  height: 54.0,
-                  child: Row(
-                    children: [
-                      widget.visiblePopButton
-                          ? _IconButton(
-                              Icons.arrow_back_ios_rounded,
-                              color: widget.iconsColor,
-                              onTap: () => Navigator.pop(context),
-                            )
-                          : Container(),
-                      const SizedBox(width: 4.0),
-                      Expanded(
-                        child: Text(
-                          widget.title,
-                          style: widget.titleStyle,
-                        ),
-                      ),
-                      _IconButton(
-                        _flashMode == FlashMode.auto
-                            ? Icons.flash_auto_outlined
-                            : _flashMode == FlashMode.torch
-                                ? Icons.flash_on_outlined
-                                : Icons.flash_off_outlined,
-                        color: widget.iconsColor,
-                        onTap: () {
-                          if (_flashMode == FlashMode.auto) {
-                            _cameraController!.setFlashMode(FlashMode.torch);
-                            _flashMode = FlashMode.torch;
-                          } else if (_flashMode == FlashMode.torch) {
-                            _cameraController!.setFlashMode(FlashMode.off);
-                            _flashMode = FlashMode.off;
-                          } else {
-                            _cameraController!.setFlashMode(FlashMode.auto);
-                            _flashMode = FlashMode.auto;
-                          }
-                          setState(() {});
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: (() {
+                if (_cameraController!.value.isInitialized) {
+                  // fetch screen size
+                  final size = MediaQuery.of(context).size;
+
+                  // calculate scale depending on screen and camera ratios
+                  // this is actually size.aspectRatio / (1 / camera.aspectRatio)
+                  // because camera preview size is received as landscape
+                  // but we're calculating for portrait orientation
+                  var scale =
+                      size.aspectRatio * _cameraController!.value.aspectRatio;
+
+                  // to prevent scaling down, invert the value
+                  if (scale < 1) scale = 1 / scale;
+                  return Transform.scale(
+                    scale: scale,
+                    child: Center(
+                      child: CameraPreview(_cameraController!),
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              }())),
           Positioned(
             bottom: 0,
             left: 0,
             right: 0,
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
-              decoration: BoxDecoration(
-                color: widget.appBarColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(24.0),
-                  topRight: Radius.circular(24.0),
-                ),
-              ),
+              // color: Colors.black,
               child: SafeArea(
                 top: false,
                 child: Row(
@@ -280,6 +216,7 @@ class _MaskForCameraViewState extends State<MaskForCameraView> {
             left: 0.0,
             right: 0.0,
             child: Center(
+              key: _stickyKey,
               child: DottedBorder(
                 borderType: BorderType.RRect,
                 strokeWidth:
