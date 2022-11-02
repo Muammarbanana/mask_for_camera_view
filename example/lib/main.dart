@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view.dart';
+import 'package:mask_for_camera_view/mask_for_camera_view_border_type.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_camera_description.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_direction.dart';
@@ -37,11 +38,13 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaskForCameraView(
       visiblePopButton: false,
-      insideLine: MaskForCameraViewInsideLine(
-        position: MaskForCameraViewInsideLinePosition.endPartThree,
-        direction: MaskForCameraViewInsideLineDirection.horizontal,
-      ),
+      // insideLine: MaskForCameraViewInsideLine(
+      //   position: MaskForCameraViewInsideLinePosition.endPartThree,
+      //   direction: MaskForCameraViewInsideLineDirection.horizontal,
+      // ),
+      borderType: MaskForCameraViewBorderType.solid,
       boxBorderWidth: 2.6,
+      boxBorderRadius: 8,
       cameraDescription: MaskForCameraViewCameraDescription.rear,
       onTake: (MaskForCameraViewResult res) => showModalBottomSheet(
         context: context,

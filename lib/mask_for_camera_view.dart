@@ -27,7 +27,7 @@ FlashMode _flashMode = FlashMode.auto;
 // ignore: must_be_immutable
 class MaskForCameraView extends StatefulWidget {
   MaskForCameraView({
-    this.title = "Crop image from camera",
+    this.title = "Cropper for Camera",
     this.boxWidth = 300.0,
     this.boxHeight = 168.0,
     this.boxBorderWidth = 1.8,
@@ -115,45 +115,65 @@ class _MaskForCameraViewState extends State<MaskForCameraView> {
       body: Stack(
         children: [
           Positioned(
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: (() {
-                if (_cameraController!.value.isInitialized) {
-                  // fetch screen size
-                  final size = MediaQuery.of(context).size;
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: (() {
+              if (_cameraController!.value.isInitialized) {
+                // fetch screen size
+                final size = MediaQuery.of(context).size;
 
-                  // calculate scale depending on screen and camera ratios
-                  // this is actually size.aspectRatio / (1 / camera.aspectRatio)
-                  // because camera preview size is received as landscape
-                  // but we're calculating for portrait orientation
-                  var scale =
-                      size.aspectRatio * _cameraController!.value.aspectRatio;
+                // calculate scale depending on screen and camera ratios
+                // this is actually size.aspectRatio / (1 / camera.aspectRatio)
+                // because camera preview size is received as landscape
+                // but we're calculating for portrait orientation
+                var scale =
+                    size.aspectRatio * _cameraController!.value.aspectRatio;
 
-                  // to prevent scaling down, invert the value
-                  if (scale < 1) scale = 1 / scale;
-                  return Transform.scale(
-                    scale: scale,
-                    child: Center(
-                      child: CameraPreview(_cameraController!),
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              }())),
+                // to prevent scaling down, invert the value
+                if (scale < 1) scale = 1 / scale;
+                return Transform.scale(
+                  scale: scale,
+                  child: Center(
+                    child: CameraPreview(_cameraController!),
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            }()),
+          ),
+          IgnorePointer(
+            child: ClipPath(
+              clipper: InvertedRRectClipper(
+                boxBorderRadius: widget.boxBorderRadius,
+                boxHeight: widget.boxHeight,
+                boxWidth: widget.boxWidth,
+              ),
+              child: Container(
+                color: Colors.black.withOpacity(0.7),
+              ),
+            ),
+          ),
           Positioned(
             bottom: 0,
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12.0),
-              // color: Colors.black,
+              padding:
+                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 24.0),
+              color: Colors.white,
               child: SafeArea(
                 top: false,
-                child: Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Text(
+                      widget.title,
+                      style: const TextStyle(color: Colors.black, fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 24),
                     Container(
                       width: 60.0,
                       height: 60.0,
@@ -164,7 +184,7 @@ class _MaskForCameraViewState extends State<MaskForCameraView> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(60.0),
                         child: Material(
-                          color: Colors.transparent,
+                          color: Colors.red,
                           child: InkWell(
                             splashColor:
                                 widget.takeButtonActionColor.withOpacity(0.26),
@@ -193,12 +213,8 @@ class _MaskForCameraViewState extends State<MaskForCameraView> {
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   width: 2.0,
-                                  color: widget.takeButtonActionColor,
+                                  color: Colors.white,
                                 ),
-                              ),
-                              child: Icon(
-                                Icons.camera_alt_outlined,
-                                color: widget.takeButtonActionColor,
                               ),
                             ),
                           ),
@@ -216,7 +232,6 @@ class _MaskForCameraViewState extends State<MaskForCameraView> {
             left: 0.0,
             right: 0.0,
             child: Center(
-              key: _stickyKey,
               child: DottedBorder(
                 borderType: BorderType.RRect,
                 strokeWidth:
@@ -304,13 +319,13 @@ Future<MaskForCameraViewResult?> _cropPicture(
   XFile xFile = await _cameraController!.takePicture();
   File imageFile = File(xFile.path);
 
-  RenderBox box = _stickyKey.currentContext!.findRenderObject() as RenderBox;
-  double size = box.size.height * 2;
+  // RenderBox box = _stickyKey.currentContext!.findRenderObject() as RenderBox;
+  // double size = box.size.height * 2;
   MaskForCameraViewResult? result = await cropImage(
     imageFile.path,
     _boxHeightForCrop!.toInt(),
     _boxWidthForCrop!.toInt(),
-    _screenHeight! - size,
+    _screenHeight!,
     _screenWidth!,
     insideLine,
   );
@@ -403,4 +418,32 @@ int _position(MaskForCameraViewInsideLinePosition? position) {
     p = position.index + 1;
   }
   return p;
+}
+
+class InvertedRRectClipper extends CustomClipper<Path> {
+  final double? boxBorderRadius;
+  final double boxHeight;
+  final double boxWidth;
+
+  const InvertedRRectClipper({
+    required this.boxBorderRadius,
+    required this.boxHeight,
+    required this.boxWidth,
+  });
+
+  @override
+  Path getClip(Size size) {
+    return Path()
+      ..addRect(
+        Rect.fromCenter(
+            center: Offset(size.width / 2, size.height / 2),
+            width: boxWidth,
+            height: boxHeight),
+      )
+      ..addRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height))
+      ..fillType = PathFillType.evenOdd;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
