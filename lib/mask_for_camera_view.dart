@@ -436,7 +436,7 @@ class InvertedRRectClipper extends CustomClipper<Path> {
     return Path()
       ..addRect(
         Rect.fromCenter(
-            center: Offset(size.width / 2, size.height / 2),
+            center: Offset(boxWidth / 2, boxHeight / 2),
             width: boxWidth,
             height: boxHeight),
       )
