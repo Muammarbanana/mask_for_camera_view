@@ -48,6 +48,9 @@ Future<MaskForCameraViewResult?> cropImage(
   List<int> croppedList = encodeJpg(croppedImage);
   Uint8List croppedBytes = Uint8List.fromList(croppedList);
   res.croppedImage = croppedBytes;
+  List<int> fullImageList = encodeJpg(image);
+  Uint8List fullImageBytes = Uint8List.fromList(fullImageList);
+  res.fullImage = fullImageBytes;
   return res;
 }
 
