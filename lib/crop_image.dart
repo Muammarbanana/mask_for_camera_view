@@ -37,8 +37,8 @@ Future<MaskForCameraViewResult?> cropImage(
   double w = cropWeight * increasedTimesW;
   double h = cropHeight * increasedTimesH;
 
-  Image croppedImage =
-      copyCrop(image, x.toInt(), y.toInt(), w.toInt(), h.toInt());
+  Image croppedImage = copyCrop(image,
+      x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt());
   MaskForCameraViewResult res = MaskForCameraViewResult();
   if (insideLine != null) {
     MaskForCameraViewResult halfRes =
@@ -73,8 +73,8 @@ Future<MaskForCameraViewResult> _cropHalfImage(
     w = (image.width / 10) * _position(insideLine.position);
     h = image.height.toDouble();
   }
-  Image firstCroppedImage =
-      copyCrop(image, x.toInt(), y.toInt(), w.toInt(), h.toInt());
+  Image firstCroppedImage = copyCrop(image,
+      x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt());
 
   List<int> firstCroppedList = encodeJpg(firstCroppedImage);
   Uint8List firstCroppedBytes = Uint8List.fromList(firstCroppedList);
@@ -92,8 +92,8 @@ Future<MaskForCameraViewResult> _cropHalfImage(
     h = image.height.toDouble();
   }
 
-  Image secondCroppedImage =
-      copyCrop(image, x.toInt(), y.toInt(), w.toInt(), h.toInt());
+  Image secondCroppedImage = copyCrop(image,
+      x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt());
 
   List<int> secondCroppedList = encodeJpg(secondCroppedImage);
   Uint8List secondCroppedBytes = Uint8List.fromList(secondCroppedList);
