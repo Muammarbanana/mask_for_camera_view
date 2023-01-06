@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:image/image.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_direction.dart';
@@ -37,8 +38,20 @@ Future<MaskForCameraViewResult?> cropImage(
   double w = cropWeight * increasedTimesW;
   double h = cropHeight * increasedTimesH;
 
-  Image croppedImage = copyCrop(image,
-      x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt());
+  if (Platform.isAndroid) {
+    if (await DeviceInfoPlugin().androidInfo.then((value) {
+      if (value.version.sdkInt > 32) {
+        return true;
+      } else {
+        return false;
+      }
+    })) {
+      image = copyRotate(image, angle: 90);
+    }
+  }
+
+  Image croppedImage = bakeOrientation(copyCrop(image,
+      x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt()));
   MaskForCameraViewResult res = MaskForCameraViewResult();
   if (insideLine != null) {
     MaskForCameraViewResult halfRes =

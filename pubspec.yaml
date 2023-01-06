@@ -10,9 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  image: ^4.0.6
+  image: ^4.0.7
   camera: ^0.10.1
   dotted_border: ^2.0.0+3
+  device_info_plus: ^8.0.0
 
 dev_dependencies:
   flutter_test:
