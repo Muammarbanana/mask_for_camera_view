@@ -37,15 +37,22 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaskForCameraView(
+      boxHeight: 240,
+      boxWidth: 382,
+      boxBorderRadius: 8,
       visiblePopButton: false,
-      // insideLine: MaskForCameraViewInsideLine(
-      //   position: MaskForCameraViewInsideLinePosition.endPartThree,
-      //   direction: MaskForCameraViewInsideLineDirection.horizontal,
-      // ),
       borderType: MaskForCameraViewBorderType.solid,
       boxBorderWidth: 2.6,
-      boxBorderRadius: 8,
-      cameraDescription: MaskForCameraViewCameraDescription.rear,
+      cameraDescription: MaskForCameraViewCameraDescription.front,
+      // visiblePopButton: false,
+      // // insideLine: MaskForCameraViewInsideLine(
+      // //   position: MaskForCameraViewInsideLinePosition.endPartThree,
+      // //   direction: MaskForCameraViewInsideLineDirection.horizontal,
+      // // ),
+      // borderType: MaskForCameraViewBorderType.solid,
+      // boxBorderWidth: 2.6,
+      // boxBorderRadius: 8,
+      // cameraDescription: MaskForCameraViewCameraDescription.rear,
       onTake: (MaskForCameraViewResult res) => showModalBottomSheet(
         context: context,
         isScrollControlled: true,

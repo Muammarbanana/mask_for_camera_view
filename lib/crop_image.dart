@@ -38,6 +38,8 @@ Future<MaskForCameraViewResult?> cropImage(
   double w = cropWeight * increasedTimesW;
   double h = cropHeight * increasedTimesH;
 
+  Image croppedImage;
+
   if (Platform.isAndroid) {
     if (await DeviceInfoPlugin().androidInfo.then((value) {
       if (value.version.sdkInt > 32) {
@@ -47,11 +49,16 @@ Future<MaskForCameraViewResult?> cropImage(
       }
     })) {
       image = copyRotate(image, angle: 90);
+      croppedImage = copyCrop(image,
+          x: x.toInt(), y: y.toInt() * 2, width: w.toInt(), height: h.toInt());
+    } else {
+      croppedImage = copyCrop(image,
+          x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt());
     }
+  } else {
+    croppedImage = copyCrop(image,
+        x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt());
   }
-
-  Image croppedImage = bakeOrientation(copyCrop(image,
-      x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt()));
   MaskForCameraViewResult res = MaskForCameraViewResult();
   if (insideLine != null) {
     MaskForCameraViewResult halfRes =
