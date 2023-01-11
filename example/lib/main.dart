@@ -8,6 +8,7 @@ import 'package:mask_for_camera_view/mask_for_camera_view_inside_line.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_direction.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_position.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
+import 'package:mask_for_camera_view_example/ktp_confirmation_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> main() async {
@@ -37,97 +38,112 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaskForCameraView(
-      boxHeight: 240,
-      boxWidth: 382,
-      boxBorderRadius: 8,
-      visiblePopButton: false,
-      borderType: MaskForCameraViewBorderType.solid,
-      boxBorderWidth: 2.6,
-      cameraDescription: MaskForCameraViewCameraDescription.front,
-      // visiblePopButton: false,
-      // // insideLine: MaskForCameraViewInsideLine(
-      // //   position: MaskForCameraViewInsideLinePosition.endPartThree,
-      // //   direction: MaskForCameraViewInsideLineDirection.horizontal,
-      // // ),
-      // borderType: MaskForCameraViewBorderType.solid,
-      // boxBorderWidth: 2.6,
-      // boxBorderRadius: 8,
-      // cameraDescription: MaskForCameraViewCameraDescription.rear,
-      onTake: (MaskForCameraViewResult res) => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
-        builder: (context) => Container(
-          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 14.0),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(26.0),
-              topRight: Radius.circular(26.0),
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                "Cropped Images",
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w600,
+        title:
+            "Letakkan e-KTP kamu di dalam bingkai dan tekan tombol merah di bawah ini untuk mengambil foto",
+        boxHeight: 240,
+        boxWidth: 382,
+        boxBorderRadius: 8,
+        visiblePopButton: false,
+        borderType: MaskForCameraViewBorderType.solid,
+        boxBorderWidth: 2.6,
+        cameraDescription: MaskForCameraViewCameraDescription.rear,
+        // visiblePopButton: false,
+        // // insideLine: MaskForCameraViewInsideLine(
+        // //   position: MaskForCameraViewInsideLinePosition.endPartThree,
+        // //   direction: MaskForCameraViewInsideLineDirection.horizontal,
+        // // ),
+        // borderType: MaskForCameraViewBorderType.solid,
+        // boxBorderWidth: 2.6,
+        // boxBorderRadius: 8,
+        // cameraDescription: MaskForCameraViewCameraDescription.rear,
+        onTake: (MaskForCameraViewResult res) {
+          if (res.croppedImage != null) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => KtpConfirmationPage(
+                  ktpImage: res.croppedImage!,
+                  fullImage: res.fullImage!,
                 ),
               ),
-              const SizedBox(height: 12.0),
-              res.croppedImage != null
-                  ? MyImageView(imageBytes: res.croppedImage!)
-                  : Container(),
-              const SizedBox(height: 8.0),
-              Row(
-                children: [
-                  res.firstPartImage != null
-                      ? Expanded(
-                          child: MyImageView(imageBytes: res.firstPartImage!))
-                      : Container(),
-                  res.firstPartImage != null && res.secondPartImage != null
-                      ? const SizedBox(width: 8.0)
-                      : Container(),
-                  res.secondPartImage != null
-                      ? Expanded(
-                          child: MyImageView(imageBytes: res.secondPartImage!))
-                      : Container(),
-                ],
-              ),
-              const SizedBox(height: 20.0),
-              Container(
-                height: 48.0,
-                decoration: BoxDecoration(
-                  color: Colors.purple,
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {
-                      launch("https://pub.dev/packages/mask_for_camera_view");
-                    },
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: const Center(
-                      child: Text(
-                        "Find plugin on pub.dev",
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            );
+          }
+        }
+        // showModalBottomSheet(
+        //   context: context,
+        //   isScrollControlled: true,
+        //   backgroundColor: Colors.transparent,
+        //   builder: (context) => Container(
+        //     padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 14.0),
+        //     decoration: const BoxDecoration(
+        //       color: Colors.white,
+        //       borderRadius: BorderRadius.only(
+        //         topLeft: Radius.circular(26.0),
+        //         topRight: Radius.circular(26.0),
+        //       ),
+        //     ),
+        //     child: Column(
+        //       mainAxisSize: MainAxisSize.min,
+        //       children: [
+        //         const Text(
+        //           "Cropped Images",
+        //           style: TextStyle(
+        //             fontSize: 24.0,
+        //             fontWeight: FontWeight.w600,
+        //           ),
+        //         ),
+        //         const SizedBox(height: 12.0),
+        //         res.croppedImage != null
+        //             ? MyImageView(imageBytes: res.croppedImage!)
+        //             : Container(),
+        //         const SizedBox(height: 8.0),
+        //         Row(
+        //           children: [
+        //             res.firstPartImage != null
+        //                 ? Expanded(
+        //                     child: MyImageView(imageBytes: res.firstPartImage!))
+        //                 : Container(),
+        //             res.firstPartImage != null && res.secondPartImage != null
+        //                 ? const SizedBox(width: 8.0)
+        //                 : Container(),
+        //             res.secondPartImage != null
+        //                 ? Expanded(
+        //                     child: MyImageView(imageBytes: res.secondPartImage!))
+        //                 : Container(),
+        //           ],
+        //         ),
+        //         const SizedBox(height: 20.0),
+        //         Container(
+        //           height: 48.0,
+        //           decoration: BoxDecoration(
+        //             color: Colors.purple,
+        //             borderRadius: BorderRadius.circular(12.0),
+        //           ),
+        //           child: Material(
+        //             color: Colors.transparent,
+        //             child: InkWell(
+        //               onTap: () {
+        //                 launch("https://pub.dev/packages/mask_for_camera_view");
+        //               },
+        //               borderRadius: BorderRadius.circular(12.0),
+        //               child: const Center(
+        //                 child: Text(
+        //                   "Find plugin on pub.dev",
+        //                   style: TextStyle(
+        //                     fontSize: 16.0,
+        //                     fontWeight: FontWeight.w600,
+        //                     color: Colors.white,
+        //                   ),
+        //                 ),
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        );
   }
 }
 

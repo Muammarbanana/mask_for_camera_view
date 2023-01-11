@@ -9,6 +9,16 @@ import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_position.d
 
 import 'mask_for_camera_view_result.dart';
 
+Future<bool> checkAndroidVersion() async {
+  return await DeviceInfoPlugin().androidInfo.then((value) {
+    if (value.version.sdkInt > 32) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+}
+
 Future<MaskForCameraViewResult?> cropImage(
     String imagePath,
     int cropHeight,
@@ -41,16 +51,13 @@ Future<MaskForCameraViewResult?> cropImage(
   Image croppedImage;
 
   if (Platform.isAndroid) {
-    if (await DeviceInfoPlugin().androidInfo.then((value) {
-      if (value.version.sdkInt > 32) {
-        return true;
-      } else {
-        return false;
-      }
-    })) {
+    if (await checkAndroidVersion()) {
       image = copyRotate(image, angle: 90);
       croppedImage = copyCrop(image,
-          x: x.toInt(), y: y.toInt() * 2, width: w.toInt(), height: h.toInt());
+          x: x.toInt(),
+          y: y.toInt() * 2,
+          width: (w.toInt() * 1.6).round(),
+          height: (h.toInt() * 1.6).round());
     } else {
       croppedImage = copyCrop(image,
           x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt());
