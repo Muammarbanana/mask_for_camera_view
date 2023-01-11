@@ -54,7 +54,7 @@ Future<MaskForCameraViewResult?> cropImage(
     if (await checkAndroidVersion()) {
       image = copyRotate(image, angle: 90);
       croppedImage = copyCrop(image,
-          x: x.toInt(),
+          x: x.toInt() * 2,
           y: y.toInt() * 2,
           width: (w.toInt() * 1.6).round(),
           height: (h.toInt() * 1.6).round());
