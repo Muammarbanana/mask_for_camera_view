@@ -55,7 +55,7 @@ Future<MaskForCameraViewResult?> cropImage(
       image = copyRotate(image, angle: 90);
       croppedImage = copyCrop(image,
           x: x.toInt() - 100,
-          y: y.toInt() * 2,
+          y: (y.toInt() * 2) - 50,
           width: (w.toInt() * 1.7).round(),
           height: (h.toInt() * 1.7).round());
     } else {
