@@ -55,19 +55,19 @@ class _KtpConfirmationPageState extends State<KtpConfirmationPage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 55, 0, 0),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Image.asset(
-                    'assets/icon/icon_x.png',
-                    height: 34,
-                    width: 34,
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(24, 55, 0, 0),
+              //   child: GestureDetector(
+              //     onTap: () {
+              //       Navigator.pop(context);
+              //     },
+              //     child: Image.asset(
+              //       'assets/icon/icon_x.png',
+              //       height: 34,
+              //       width: 34,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
           Expanded(

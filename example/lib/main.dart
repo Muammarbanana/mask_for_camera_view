@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_border_type.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_camera_description.dart';
@@ -14,7 +16,8 @@ import 'package:url_launcher/url_launcher.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MaskForCameraView.initialize();
-  runApp(const MyApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => runApp(const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -27,8 +30,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        debugShowCheckedModeBanner: false, home: HomePage());
+    return ScreenUtilInit(
+        designSize: const Size(430, 932),
+        builder: (BuildContext context, Widget? child) {
+          return const MaterialApp(
+              debugShowCheckedModeBanner: false, home: HomePage());
+        });
   }
 }
 
@@ -40,8 +47,8 @@ class HomePage extends StatelessWidget {
     return MaskForCameraView(
         title:
             "Letakkan e-KTP kamu di dalam bingkai dan tekan tombol merah di bawah ini untuk mengambil foto",
-        boxHeight: 240,
-        boxWidth: 382,
+        boxHeight: 240.h,
+        boxWidth: 382.w,
         boxBorderRadius: 8,
         visiblePopButton: false,
         borderType: MaskForCameraViewBorderType.solid,

@@ -50,22 +50,25 @@ Future<MaskForCameraViewResult?> cropImage(
 
   Image croppedImage;
 
-  if (Platform.isAndroid) {
-    if (await checkAndroidVersion()) {
-      image = copyRotate(image, angle: 90);
-      croppedImage = copyCrop(image,
-          x: x.toInt() - 100,
-          y: (y.toInt() * 2) - 50,
-          width: (w.toInt() * 1.7).round(),
-          height: (h.toInt() * 1.7).round());
-    } else {
-      croppedImage = copyCrop(image,
-          x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt());
-    }
-  } else {
-    croppedImage = copyCrop(image,
-        x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt());
-  }
+  // if (Platform.isAndroid) {
+  //   if (await checkAndroidVersion()) {
+  //     image = copyRotate(image, angle: 90);
+  //     croppedImage = copyCrop(image,
+  //         x: x.toInt() - 100,
+  //         y: (y.toInt() * 2) - 50,
+  //         width: (w.toInt() * 1.7).round(),
+  //         height: (h.toInt() * 1.7).round());
+  //   } else {
+  //     croppedImage = copyCrop(image,
+  //         x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt());
+  //   }
+  // } else {
+  //   croppedImage = copyCrop(image,
+  //       x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt());
+  // }
+
+  croppedImage = copyCrop(image,
+      x: x.toInt(), y: y.toInt(), width: w.toInt(), height: h.toInt());
   MaskForCameraViewResult res = MaskForCameraViewResult();
   if (insideLine != null) {
     MaskForCameraViewResult halfRes =
